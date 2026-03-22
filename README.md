@@ -3,6 +3,7 @@
 Extraction, attribution, and verification of inline citations in LLM responses.
 
 [![npm version](https://img.shields.io/npm/v/rag-cite.svg)](https://www.npmjs.com/package/rag-cite)
+[![npm downloads](https://img.shields.io/npm/dt/rag-cite.svg)](https://www.npmjs.com/package/rag-cite)
 [![license](https://img.shields.io/npm/l/rag-cite.svg)](https://github.com/SiluPanda/rag-cite/blob/master/LICENSE)
 [![node](https://img.shields.io/node/v/rag-cite.svg)](https://nodejs.org)
 
