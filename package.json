@@ -1,6 +1,6 @@
 {
   "name": "rag-cite",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Extract and verify inline citations from LLM responses",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
