@@ -1,6 +1,6 @@
 {
   "name": "rag-cite",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Extract and verify inline citations from LLM responses",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
     "lint": "eslint src/",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": ["rag", "citation", "attribution", "verification", "llm", "grounding", "faithfulness", "claim", "source", "nlp"],
   "author": "",
   "license": "MIT",
   "engines": {
