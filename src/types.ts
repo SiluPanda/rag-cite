@@ -202,8 +202,6 @@ export interface CiteOptions {
   embedder?: (text: string) => Promise<number[]> | number[];
   /** Citation pattern detection configuration. */
   citationPatterns?: CitationPattern[];
-  /** Whether to enable auto-attribution mode for uncited claims. Default: true. */
-  autoAttribute?: boolean;
   /** Claim extraction granularity. Default: 'sentence'. */
   claimGranularity?: 'sentence' | 'clause' | 'paragraph';
   /** Map from citation identifiers to source chunk IDs. */
