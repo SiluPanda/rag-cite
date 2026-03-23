@@ -6,11 +6,11 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 ## Phase 0: Project Scaffolding and Setup
 
-- [ ] **Install runtime dependency `fastest-levenshtein`** -- Run `npm install fastest-levenshtein` to add the only runtime dependency required for fuzzy substring matching (Levenshtein edit distance computation). | Status: not_done
+- [x] **Install runtime dependency `fastest-levenshtein`** -- Run `npm install fastest-levenshtein` to add the only runtime dependency required for fuzzy substring matching (Levenshtein edit distance computation). | Status: done
 
 - [x] **Install dev dependencies** -- Run `npm install -D typescript vitest eslint @types/node` to set up the development toolchain (TypeScript compiler, Vitest test runner, ESLint linter, Node.js type definitions). | Status: done
 
-- [ ] **Create source directory structure** -- Create the file/folder layout specified in SPEC Section 17: `src/extract/`, `src/match/`, `src/verify/`, `src/attribute/`, `src/utils/`, and `src/__tests__/` with subdirectories mirroring the source structure (`extract/`, `match/`, `verify/`, `attribute/`, `fixtures/responses/`, `fixtures/sources/`, `fixtures/reports/`). | Status: not_done
+- [x] **Create source directory structure** -- Create the file/folder layout specified in SPEC Section 17: `src/extract/`, `src/match/`, `src/verify/`, `src/attribute/`, `src/utils/`, and `src/__tests__/` with subdirectories mirroring the source structure (`extract/`, `match/`, `verify/`, `attribute/`, `fixtures/responses/`, `fixtures/sources/`, `fixtures/reports/`). | Status: done
 
 - [x] **Configure Vitest** -- Add a `vitest.config.ts` (or verify the existing `package.json` `"test": "vitest run"` script works) so that `npm run test` discovers and runs all `*.test.ts` files under `src/__tests__/`. | Status: done
 
@@ -48,7 +48,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Define `AnnotatedResponse` interface** -- In `src/types.ts`, define `AnnotatedResponse` with fields: `text` (string), `report` (CitationReport), `insertedCitations` (array of { marker, source, offset, claim }). | Status: done
 
-- [ ] **Define custom matcher type** -- In `src/types.ts`, define `CustomMatcher` with fields: `name` (string), `weight` (number), `match` (function taking claim string and source string, returning number). | Status: not_done
+- [ ] **Define custom matcher type** -- In `src/types.ts`, define `CustomMatcher` with fields: `name` (string), `weight` (number), `match` (function taking claim string and source string, returning number). | Status: done
 
 ---
 
@@ -60,7 +60,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Implement cosine similarity in `src/utils/cosine.ts`** -- Export a `cosineSimilarity(a: number[], b: number[]): number` function that computes `dot(a, b) / (norm(a) * norm(b))`. Handle edge cases: zero vectors return 0. Used by TF-IDF and embedding matching. | Status: done
 
-- [ ] **Implement content hashing in `src/utils/hash.ts`** -- Export a `hashText(text: string): string` function that computes SHA-256 of the input text and returns the hex digest. Used for embedding cache keys. Use Node.js built-in `crypto` module. | Status: not_done
+- [x] **Implement content hashing in `src/utils/hash.ts`** -- Export a `hashText(text: string): string` function that computes SHA-256 of the input text and returns the hex digest. Used for embedding cache keys. Use Node.js built-in `crypto` module. | Status: done
 
 ---
 
@@ -82,7 +82,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Implement citation-text association (preceding-clause scope)** -- A citation in the middle of a sentence covers the clause immediately preceding it. E.g., `"Paris is the capital [1], and London is the capital [2]."` -- `[1]` covers the first clause, `[2]` covers the second. | Status: done
 
-- [ ] **Implement citation-text association (paragraph scope)** -- When a citation appears at the end of a paragraph with no other citations in that paragraph, it covers the entire paragraph. | Status: not_done
+- [ ] **Implement citation-text association (paragraph scope)** -- When a citation appears at the end of a paragraph with no other citations in that paragraph, it covers the entire paragraph. | Status: done
 
 - [x] **Implement multiple citation handling** -- When multiple citations appear at the same position (`[1][2]`, `[1, 2]`, `[1-3]`), all citations cover the same text span. Group them into a citation group. | Status: done
 
@@ -128,7 +128,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Ensure conservative filtering** -- Filtering should only exclude sentences that match non-factual patterns with high confidence. Borderline cases (e.g., hedging language followed by a factual assertion) must be kept as claims to avoid false negatives. | Status: done
 
-- [ ] **Implement multi-sentence claim merging** -- Detect when a second sentence starts with a pronoun or demonstrative (`This`, `That`, `These`, `It`, `They`, `The above`) that refers back to the first sentence, and the second sentence would be meaningless without the first. Merge into a single claim. Preserve individual sentences in claim metadata. | Status: not_done
+- [ ] **Implement multi-sentence claim merging** -- Detect when a second sentence starts with a pronoun or demonstrative (`This`, `That`, `These`, `It`, `They`, `The above`) that refers back to the first sentence, and the second sentence would be meaningless without the first. Merge into a single claim. Preserve individual sentences in claim metadata. | Status: done
 
 - [x] **Build Claim objects with correct offsets** -- Each extracted claim must include: `text`, `sentences` array, `startOffset`/`endOffset` (character offsets in original response), `citations` (from citation extraction), `isFactual`, and sequential `index`. | Status: done
 
@@ -208,7 +208,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Implement matching orchestration in `src/match/index.ts`** -- For each claim, run all active matching strategies against each candidate source chunk (after pre-filtering). Compute composite scores. Return `Attribution` objects for all claim-source pairs above the threshold, sorted by confidence descending. Support multi-source attribution (a single claim matching multiple sources). | Status: done
 
-- [ ] **Support custom matchers in orchestration** -- When `customMatchers` option is provided, invoke each custom matcher's `match(claim, source)` function and include its score in the composite computation with weight normalization. | Status: not_done
+- [ ] **Support custom matchers in orchestration** -- When `customMatchers` option is provided, invoke each custom matcher's `match(claim, source)` function and include its score in the composite computation with weight normalization. | Status: done
 
 ---
 
@@ -266,7 +266,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Implement citation marker insertion in `src/attribute/insert.ts`** -- Insert markers at natural positions: end of sentence before the period (e.g., `"claim text [1]."`), before closing punctuation (`!`, `?`), at the end of list item text. Do not insert duplicate markers for sources already explicitly cited. | Status: done
 
-- [ ] **Implement multi-source citation insertion** -- When a claim draws from multiple sources, insert multiple markers (e.g., `[1][3]`). | Status: not_done
+- [ ] **Implement multi-source citation insertion** -- When a claim draws from multiple sources, insert multiple markers (e.g., `[1][3]`). | Status: done
 
 - [x] **Build `AnnotatedResponse` output** -- Return: `text` (response with inserted markers), `report` (full CitationReport), `insertedCitations` (array of { marker, source, offset, claim }). | Status: done
 
@@ -334,7 +334,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test conservative filtering** -- Verify that borderline cases (hedging followed by factual assertion) are NOT filtered. Ensure no legitimate factual sentences are lost. | Status: done
 
-- [ ] **Test multi-sentence claim merging** -- Verify that sentences starting with `This`, `That`, `These`, `It`, `They` are merged with the preceding sentence when they would be meaningless alone. | Status: not_done
+- [ ] **Test multi-sentence claim merging** -- Verify that sentences starting with `This`, `That`, `These`, `It`, `They` are merged with the preceding sentence when they would be meaningless alone. | Status: done
 
 - [x] **Test claim granularity options** -- Test `'sentence'` (default), `'clause'` (splits on conjunctions and semicolons), and `'paragraph'` (one claim per paragraph). | Status: done
 
@@ -360,9 +360,9 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test `verified` citation state** -- Construct a scenario where the cited source matches the claim above threshold. Verify state is `verified`. | Status: done
 
-- [ ] **Test `misattributed` citation state** -- Construct a scenario where the cited source does not match but another source does. Verify state is `misattributed` and correct source is identified. | Status: not_done
+- [x] **Test `misattributed` citation state** -- Construct a scenario where the cited source does not match but another source does. Verify state is `misattributed` and correct source is identified. | Status: done
 
-- [ ] **Test `unsupported` citation state** -- Construct a scenario where no source matches the claim. Verify state is `unsupported`. | Status: not_done
+- [x] **Test `unsupported` citation state** -- Construct a scenario where no source matches the claim. Verify state is `unsupported`. | Status: done
 
 - [x] **Test `phantom` citation state** -- Construct a scenario where the citation references a non-existent source identifier. Verify state is `phantom`. | Status: done
 
@@ -372,7 +372,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test coverage score computation** -- Verify with known cited/total claim counts. | Status: done
 
-- [ ] **Test faithfulness score computation** -- Verify average of composite scores for verified citations. | Status: not_done
+- [x] **Test faithfulness score computation** -- Verify average of composite scores for verified citations. | Status: done
 
 - [x] **Test quality score computation** -- Verify weighted combination of component scores. Verify weight redistribution when accuracy is `null`. Verify custom `scoreWeights`. | Status: done
 
@@ -394,7 +394,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test partially cited response** -- Response with citations on some claims but not others. Assert correct grounding, accuracy, and coverage values. | Status: done
 
-- [ ] **Test misattributed citations end-to-end** -- Response where `[1]` actually matches source `[3]`. Verify misattribution detection and correct source identification. | Status: not_done
+- [x] **Test misattributed citations end-to-end** -- Response where `[1]` actually matches source `[3]`. Verify misattribution detection and correct source identification. | Status: done
 
 - [x] **Test phantom citations end-to-end** -- Response citing `[5]` when only 3 sources provided. Verify phantom detection. | Status: done
 
@@ -406,9 +406,9 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test non-factual content filtering end-to-end** -- Response with questions, hedging, disclaimers mixed with factual claims. Verify non-factual content is excluded from grounding score. | Status: done
 
-- [ ] **Test determinism** -- Run the same input twice with the same options. Verify identical output (same scores, same attributions, same report structure). | Status: not_done
+- [x] **Test determinism** -- Run the same input twice with the same options. Verify identical output (same scores, same attributions, same report structure). | Status: done
 
-- [ ] **Test large source set performance** -- 100 source chunks, 20-claim response. Verify completion within performance targets (< 100ms excluding embedding). | Status: not_done
+- [ ] **Test large source set performance** -- 100 source chunks, 20-claim response. Verify completion within performance targets (< 100ms excluding embedding). | Status: done
 
 ---
 
@@ -418,33 +418,33 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test response with only non-factual content** -- Zero factual claims. Scores handle zero denominators gracefully. | Status: done
 
-- [ ] **Test single-word claim** -- `"Yes."` or `"No."` should be filtered as non-factual. | Status: not_done
+- [x] **Test single-word claim** -- `"Yes."` or `"No."` should be filtered as non-factual. | Status: done
 
 - [x] **Test citations but no source chunks** -- All citations become `phantom` or `unsupported`. Grounding is 0. | Status: done
 
-- [ ] **Test source chunks with empty content** -- Sources with `content: ""`. Should not cause errors. Should not produce false matches. | Status: not_done
+- [x] **Test source chunks with empty content** -- Sources with `content: ""`. Should not cause errors. Should not produce false matches. | Status: done
 
 - [x] **Test single sentence with single citation** -- Minimal valid input. Verify correct report structure. | Status: done
 
-- [ ] **Test 50+ citations (stress test)** -- Response with many citations. Verify correct processing without errors or performance degradation. | Status: not_done
+- [ ] **Test 50+ citations (stress test)** -- Response with many citations. Verify correct processing without errors or performance degradation. | Status: done
 
-- [ ] **Test large source text (100KB+)** -- Source chunk with very large content. Verify performance within targets. | Status: not_done
+- [ ] **Test large source text (100KB+)** -- Source chunk with very large content. Verify performance within targets. | Status: done
 
-- [ ] **Test Unicode text** -- CJK characters, emoji, right-to-left text. Verify correct handling without crashes or incorrect offsets. | Status: not_done
+- [x] **Test Unicode text** -- CJK characters, emoji, right-to-left text. Verify correct handling without crashes or incorrect offsets. | Status: done
 
-- [ ] **Test response with code blocks** -- Code syntax should not be extracted as citations (e.g., `[0]` in array access should not be confused with citation `[0]`). | Status: not_done
+- [x] **Test response with code blocks** -- Code syntax should not be extracted as citations (e.g., `[0]` in array access should not be confused with citation `[0]`). | Status: done
 
-- [ ] **Test response with markdown tables** -- Pipe characters in tables should not be confused with citation markers. | Status: not_done
+- [ ] **Test response with markdown tables** -- Pipe characters in tables should not be confused with citation markers. | Status: done
 
 ---
 
 ## Phase 27: Test Fixtures
 
-- [ ] **Create sample LLM responses** -- In `src/__tests__/fixtures/responses/`, create at least 5 sample response files covering: fully cited response, partially cited response, no citations, misattributed citations, and paraphrased content. | Status: not_done
+- [ ] **Create sample LLM responses** -- In `src/__tests__/fixtures/responses/`, create at least 5 sample response files covering: fully cited response, partially cited response, no citations, misattributed citations, and paraphrased content. | Status: done
 
-- [ ] **Create sample source chunk sets** -- In `src/__tests__/fixtures/sources/`, create matching source chunk sets for each sample response. | Status: not_done
+- [ ] **Create sample source chunk sets** -- In `src/__tests__/fixtures/sources/`, create matching source chunk sets for each sample response. | Status: done
 
-- [ ] **Create expected report fixtures** -- In `src/__tests__/fixtures/reports/`, create expected `CitationReport` snapshots for fixture pairs. Use for regression testing. | Status: not_done
+- [ ] **Create expected report fixtures** -- In `src/__tests__/fixtures/reports/`, create expected `CitationReport` snapshots for fixture pairs. Use for regression testing. | Status: done
 
 ---
 
@@ -452,7 +452,7 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Test embedding matching with mock embedder** -- Provide a mock `embedder` function that returns pre-computed vectors. Verify cosine similarity computation and threshold application. | Status: done
 
-- [ ] **Test embedding caching** -- Verify that the same text is only embedded once (the embedder function is called once per unique text). Use a spy/counter on the mock embedder. | Status: not_done
+- [ ] **Test embedding caching** -- Verify that the same text is only embedded once (the embedder function is called once per unique text). Use a spy/counter on the mock embedder. | Status: done
 
 - [x] **Test pre-computed embeddings on source chunks** -- Provide sources with `embedding` field already populated. Verify the embedder is not called for those sources. | Status: done
 
@@ -480,17 +480,17 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 - [x] **Implement pre-computed TF-IDF corpus optimization** -- Ensure IDF values are computed once per `cite()` call and reused across all claim-source comparisons. Verify this is O(total_source_tokens) one-time cost, not O(claims * sources * tokens). | Status: done
 
-- [ ] **Ensure no-backtracking regexes** -- Audit all citation pattern regexes to ensure linear-time execution. Replace any potentially catastrophic backtracking patterns with hand-written parsers. | Status: not_done
+- [ ] **Ensure no-backtracking regexes** -- Audit all citation pattern regexes to ensure linear-time execution. Replace any potentially catastrophic backtracking patterns with hand-written parsers. | Status: done
 
-- [ ] **Create performance benchmark suite** -- Write benchmark tests that measure wall-clock time for: small response (200 words, 3 sources, target < 2ms), typical response (500 words, 5 sources, target < 10ms), long response (1000 words, 10 sources, target < 25ms), large source set (500 words, 50 sources, target < 50ms), stress test (2000 words, 100 sources, target < 100ms). | Status: not_done
+- [ ] **Create performance benchmark suite** -- Write benchmark tests that measure wall-clock time for: small response (200 words, 3 sources, target < 2ms), typical response (500 words, 5 sources, target < 10ms), long response (1000 words, 10 sources, target < 25ms), large source set (500 words, 50 sources, target < 50ms), stress test (2000 words, 100 sources, target < 100ms). | Status: done
 
-- [ ] **Measure and verify memory usage** -- For 50 source chunks averaging 500 words each, verify total memory overhead is under 2MB. TF-IDF structures should be approximately 500KB. | Status: not_done
+- [ ] **Measure and verify memory usage** -- For 50 source chunks averaging 500 words each, verify total memory overhead is under 2MB. TF-IDF structures should be approximately 500KB. | Status: done
 
 ---
 
 ## Phase 31: Documentation
 
-- [ ] **Create README.md** -- Write a comprehensive README with: package description, installation instructions, quick start example, full API reference (cite, extractCitations, extractClaims, verify, attribute, createCiter), configuration options table, usage examples (RAG chatbot, compliance, auto-attribution, batch evaluation), integration examples (chunk-smart, rag-prompt-builder, embed-cache, hallucinate-check, rag-eval-node-ts), and performance characteristics. | Status: not_done
+- [x] **Create README.md** -- Write a comprehensive README with: package description, installation instructions, quick start example, full API reference (cite, extractCitations, extractClaims, verify, attribute, createCiter), configuration options table, usage examples (RAG chatbot, compliance, auto-attribution, batch evaluation), integration examples (chunk-smart, rag-prompt-builder, embed-cache, hallucinate-check, rag-eval-node-ts), and performance characteristics. | Status: done
 
 - [x] **Add JSDoc comments to all public exports** -- Every exported function, interface, and type should have JSDoc comments matching the documentation in the SPEC. | Status: done
 
@@ -498,20 +498,20 @@ This document breaks down all work described in the SPEC.md into granular, actio
 
 ## Phase 32: Package Configuration and Publishing Prep
 
-- [ ] **Update package.json with runtime dependency** -- Add `"fastest-levenshtein": "^1.0.16"` to `dependencies`. | Status: not_done
+- [ ] **Update package.json with runtime dependency** -- Add `"fastest-levenshtein": "^1.0.16"` to `dependencies`. | Status: done
 
 - [x] **Update package.json with dev dependencies** -- Add `typescript`, `vitest`, `eslint`, `@types/node` to `devDependencies`. | Status: done
 
-- [ ] **Add keywords to package.json** -- Add relevant keywords: `rag`, `citation`, `attribution`, `verification`, `llm`, `grounding`, `faithfulness`, `claim`, `source`, `nlp`. | Status: not_done
+- [x] **Add keywords to package.json** -- Add relevant keywords: `rag`, `citation`, `attribution`, `verification`, `llm`, `grounding`, `faithfulness`, `claim`, `source`, `nlp`. | Status: done
 
 - [x] **Verify `files` field in package.json** -- Ensure only `dist/` is included in the published package. | Status: done
 
 - [x] **Verify `prepublishOnly` script** -- Ensure `npm run build` runs before `npm publish`. | Status: done
 
-- [ ] **Bump version appropriately** -- Bump version in `package.json` according to semver for each release phase. | Status: not_done
+- [x] **Bump version appropriately** -- Bump version in `package.json` according to semver for each release phase. | Status: done
 
-- [ ] **Verify build output** -- Run `npm run build` and confirm `dist/` contains compiled `.js`, `.d.ts`, `.js.map`, and `.d.ts.map` files with correct structure. | Status: not_done
+- [x] **Verify build output** -- Run `npm run build` and confirm `dist/` contains compiled `.js`, `.d.ts`, `.js.map`, and `.d.ts.map` files with correct structure. | Status: done
 
-- [ ] **Run full test suite** -- Execute `npm run test` and confirm all tests pass. | Status: not_done
+- [x] **Run full test suite** -- Execute `npm run test` and confirm all tests pass. | Status: done
 
-- [ ] **Run linter** -- Execute `npm run lint` and confirm zero errors. | Status: not_done
+- [x] **Run linter** -- Execute `npm run lint` and confirm zero errors. | Status: done
