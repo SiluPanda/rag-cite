@@ -38,6 +38,7 @@ interface ScoringContext {
   tfidfThreshold: number;
   embeddingThreshold: number;
   attributionThreshold: number;
+  maxSourcesPerClaim: number;
   embedder?: (text: string) => Promise<number[]> | number[];
   embeddingCache: Map<string, number[]>;
 }
@@ -85,6 +86,7 @@ export function buildScoringContext(
     tfidfThreshold: options?.tfidfThreshold ?? 0.3,
     embeddingThreshold: options?.embeddingThreshold ?? 0.8,
     attributionThreshold: options?.attributionThreshold ?? 0.4,
+    maxSourcesPerClaim: options?.maxSourcesPerClaim ?? 50,
     embedder: options?.embedder,
     embeddingCache: new Map(),
   };
@@ -213,7 +215,7 @@ export async function scoreClaimAgainstSources(
 ): Promise<Attribution[]> {
   // Pre-filter sources by shared term count for large source sets
   let candidates = sources;
-  if (sources.length > (ctx.attributionThreshold > 0 ? 50 : sources.length)) {
+  if (sources.length > (ctx.attributionThreshold > 0 ? ctx.maxSourcesPerClaim : sources.length)) {
     const claimTokens = new Set(tokenizeFiltered(claim.text, ctx.stopwords));
     const scored = sources.map((s) => {
       const srcTokens = ctx.sourceTokens.get(s.id) ?? [];

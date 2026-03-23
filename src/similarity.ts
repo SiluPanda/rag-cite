@@ -62,10 +62,11 @@ export function exactMatch(claim: string, source: string): { score: number; evid
     const words = normClaim.split(' ').slice(0, 3).join(' ');
     const approxIdx = lowerSource.indexOf(words);
     const start = approxIdx >= 0 ? approxIdx : 0;
+    const matchLen = normClaim.length;
     return {
       score: 1.0,
-      evidence: source.slice(start, start + claim.length + 20).trim(),
-      offset: { start, end: start + claim.length },
+      evidence: source.slice(start, start + matchLen + 20).trim(),
+      offset: { start, end: start + matchLen },
     };
   }
 
